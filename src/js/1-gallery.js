@@ -64,20 +64,22 @@ const images = [
   },
 ];
 
-// ! marking
-const unorderedList = document.querySelector('.gallery');
-const galleryItems = images
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+const setGallery = document.querySelector('ul.gallery');
+const imgGallery = images
   .map(
-    image => `
-    <li class="gallery-item">
+    image => `<li class="gallery-item">
       <a class="gallery-link" href="${image.original}">
-        <img class="gallery-image" src="${image.preview}"  alt="${image.description}">
-      </a>
-    </li>`
+      <img class="gallery-image"; src= "${image.preview}"
+     
+      alt="${image.description}">
+      </a></li>`
   )
   .join('');
 
-unorderedList.insertAdjacentHTML('beforeend', galleryItems);
+setGallery.insertAdjacentHTML('beforeend', imgGallery);
 
 const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',

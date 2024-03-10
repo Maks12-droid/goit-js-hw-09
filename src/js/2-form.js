@@ -1,40 +1,36 @@
-const form = document.querySelector('.feedback-form');
+const formSet = document.querySelector('.feedback-form');
+const inputinfo = formSet.elements.email;
+const areainfo = formSet.elements.message;
+let saveinfo = { email: '', message: '' };
 
-const saveForm = () => {
-  const formData = {
-    email: form.elements.email.value.trim(),
-    message: form.elements.message.value.trim(),
-  };
-  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
-};
+const parsedinfo = JSON.parse(localStorage.getItem('feedback-form-state'));
 
-const loadForm = () => {
-  const saveData = localStorage.getItem('feedback-form-state');
-  if (saveData) {
-    const { email, message } = JSON.parse(saveData);
-    form.elements.email.value = email;
-    form.elements.message.value = message;
+if (parsedinfo !== null) {
+  areainfo.value = parsedinfo.message;
+  inputinfo.value = parsedinfo.email;
+
+  saveinfo = parsedinfo;
+}
+
+formSet.addEventListener('input', event => {
+  const email = event.currentTarget.elements.email.value;
+  const message = event.currentTarget.elements.message.value;
+
+  saveinfo.email = email.trim();
+  saveinfo.message = message.trim();
+  localStorage.setItem('feedback-form-state', JSON.stringify(saveinfo));
+});
+
+formSet.addEventListener('submit', evt => {
+  evt.preventDefault();
+
+  if (saveinfo.email.length == 0 || saveinfo.message.length == 0) {
+    console.log(`please fill all field`);
+  } else {
+    console.log(saveinfo);
+    localStorage.removeItem('feedback-form-state');
+    formSet.reset();
+    saveinfo.email = '';
+    saveinfo.message = '';
   }
-};
-
-form.addEventListener('input', saveForm);
-
-window.addEventListener('load', loadForm);
-
-form.addEventListener('submit', e => {
-  e.preventDefault();
-  localStorage.removeItem('feedback-form-state');
-  if (form.elements.email.value === '') {
-    alert('Please enter your email');
-  }
-  if (form.elements.message.value === '') {
-    alert('Please enter your message');
-  }
-
-  console.log({
-    email: form.elements.email.value.trim(),
-    message: form.elements.message.value.trim(),
-  });
-
-  form.reset();
 });
